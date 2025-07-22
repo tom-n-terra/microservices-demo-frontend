@@ -388,18 +388,6 @@ func (fe *frontendServer) placeOrderHandler(w http.ResponseWriter, r *http.Reque
 	}
 }
 
-func (fe *frontendServer) emptyCartHandler(w http.ResponseWriter, r *http.Request) {
-	log := r.Context().Value(ctxKeyLog{}).(logrus.FieldLogger)
-	log.Debug("emptying cart")
-
-	if err := fe.emptyCart(r.Context(), sessionID(r)); err != nil {
-		renderHTTPError(log, r, w, errors.Wrap(err, "failed to empty cart"), http.StatusInternalServerError)
-		return
-	}
-	w.Header().Set("location", baseUrl + "/")
-	w.WriteHeader(http.StatusFound)
-}
-
 func (fe *frontendServer) assistantHandler(w http.ResponseWriter, r *http.Request) {
 	currencies, err := fe.getCurrencies(r.Context())
 	if err != nil {
